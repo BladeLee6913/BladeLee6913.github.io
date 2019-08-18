@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     
-    <title>Zhipeng&#39;s Note</title>
+    <title>Haar小波的傅里叶变换 | Zhipeng&#39;s Note</title>
     <meta name="renderer" content="webkit">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
@@ -15,11 +15,11 @@
     <meta name="description" content="Exploring Essence">
 
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Zhipeng&#39;s Note">
+    <meta name="twitter:title" content="Haar小波的傅里叶变换 | Zhipeng&#39;s Note">
     <meta name="twitter:description" content="Exploring Essence">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Zhipeng&#39;s Note">
+    <meta property="og:title" content="Haar小波的傅里叶变换 | Zhipeng&#39;s Note">
     <meta property="og:description" content="Exploring Essence">
 
     
@@ -37,7 +37,7 @@
     <link rel="alternate" type="application/rss+xml" title="Zhipeng&#39;s Note" href="/atom.xml">
     
 
-    <link rel="canonical" href="http://yoursite.com"/>
+    <link rel="canonical" href="http://yoursite.com/2019/08/18/Haar小波的傅里叶变换/"/>
 
                  
 </head>
@@ -51,7 +51,7 @@
     </span>
 
     
-<header class="panel-cover " style="background-image: url(/images/background-cover.jpg)">
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/background-cover.jpg)">
   <div class="panel-main">
     <div class="panel-main__inner panel-inverted">
     <div class="panel-main__content">
@@ -129,30 +129,56 @@
 
     <div class="content-wrapper">
         <div class="content-wrapper__inner">
-            <div class="main-post-list">
-    
-  <ol class="post-list">
-  
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2019/08/18/Haar小波的傅里叶变换/" title="link to post.title">Haar小波的傅里叶变换</a></h2>
-      <p class="excerpt">
-    
-      Haar小波来自于数学家Haar于1910年提出的Haar正交函数集，其定义如(1)式。$$\tag{1}\psi \left( t \right) =\begin{cases}1,&amp;amp;  0 \leq t &amp;lt; \frac{1}{2} \\-1,&amp;amp; \frac{1}{2} \leq t&amp;lt; 1\\0,&amp;amp; \text{其他}\end{cases}$$
-之前有人问过我H
-    &hellip;
-      </p>
-      <div class="post-list__meta"><time datetime="2019-08-18T08:32:35.915Z" class="post-list__meta--date date">2019-08-18</time> &#8226; <span class="post-list__meta--tags tags">于 
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-08-18T08:32:35.915Z" class="post-list__meta--date date">2019-08-18</time> &#8226; <span class="post-meta__tags tags">于 
   <a class="tag-link" href="/tags/Signal-processing/">Signal processing</a>
-</span><a class="btn-border-small" href="/2019/08/18/Haar小波的傅里叶变换/">详细阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
+ </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Haar小波的傅里叶变换</h1>
+  </header>
+
+  <section class="post">
+    <p>Haar小波来自于数学家Haar于1910年提出的Haar正交函数集，其定义如(1)式。<br>$$<br>\tag{1}<br>\psi \left( t \right) =<br>\begin{cases}<br>1,&amp;  0 \leq t &lt; \frac{1}{2} \\<br>-1,&amp; \frac{1}{2} \leq t&lt; 1\\<br>0,&amp; \text{其他}<br>\end{cases}<br>$$</p>
+<p>之前有人问过我Haar小波的傅里叶变换\(  \Psi ( j\Omega )  \) 是多少，当时没有推导出来。后来在一位师弟的提示下，推导得到了书上的结果，现在将推导的过程完整地写一遍。</p>
+<p>将\( \psi \left( t \right) \)左移至关于y轴对称，得到(2)式。<br>$$<br>\tag{2}<br>\psi \left( t \right) =<br>\begin{cases}<br>1,&amp; -\frac{1}{2}\leq t&lt;0 \\<br>-1,&amp; 0\leq t&lt;\frac{1}{2}\\<br>0,&amp; \text{其他}<br>\end{cases}<br>$$</p>
+<p>对(2)式进行一次微分，可以得到(3)式。<br>$$<br>\tag{3}<br>\frac{d\psi \left( t \right)}{dt}=\delta \left( t+\frac{1}{2} \right) -2\delta \left( t \right) +\delta \left( t-\frac{1}{2} \right)<br>$$</p>
+<p>(3)式中\( \delta \left( t \right) \)为单位冲激函数，对(3)式两边进行傅里叶变换得到(4)式。<br>$$<br>\tag{4}<br>j\Omega \Psi \left( j\Omega \right) =e^{j\Omega \frac{1}{2}}-2+e^{-j\Omega \frac{1}{2}}<br>$$</p>
+<p>(4)式中\( \Psi \left( j\Omega \right) \)<br> 为(2)式所对应的傅里叶变换。根据欧拉公式，对(4)式进行如下变换。<br>$$<br>\tag{5}<br>j\Omega \Psi \left( j\Omega \right) =\left( \cos \frac{1}{2}\Omega +j\sin \frac{1}{2}\Omega \right) -2+\left( \cos \frac{1}{2}\Omega -j\sin \frac{1}{2}\Omega \right)<br>$$<br>$$<br>\tag{6}<br>j\Omega \Psi \left( j\Omega \right) =2\cos \frac{1}{2}\Omega -2<br>$$</p>
+<p>根据三角函数二倍角公式，对(6)式进行变换得到(7)式。<br>$$<br>\tag{7}<br>j\Omega \Psi \left( j\Omega \right) =-4\left( \sin \frac{1}{4}\Omega \right) ^2<br>$$</p>
+<p>因此，\( \Psi \left( j\Omega \right) 为 -4\frac{1}{j\Omega}\left( \sin \frac{1}{4}\Omega \right) ^2 \) ，化简后为\( j\frac{4}{\Omega}\left( \sin \frac{1}{4}\Omega \right) ^2 \)</p>
+<p>由于\( \Psi \left( j\Omega \right) \)是为Haar小波在时域中左移0.5后进行傅里叶变换得到，因此，Haar小波所对应的傅里叶变换如式(8)。<br>$$<br>\tag{8}<br>\Psi \left( j\Omega \right) =j\frac{4}{\Omega}\left( \sin \frac{\Omega}{4} \right) ^2e^{-j\frac{\Omega}{2}}<br>$$</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+     
+   
   
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 Zhipeng - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
     
-  </ol>
-
-
- <script type="text/x-mathjax-config">
+  
+         <script type="text/x-mathjax-config">
     MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
         tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
         TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
@@ -170,20 +196,7 @@
 </script>
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-</div>
-
-
-            <footer class="footer">
-    <span class="footer__copyright">
-        &copy; 2019 Zhipeng - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
-       
-    </span>
-    <span class="footer__copyright">
-             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
-         </span>
-       
-    
-    
+   
 </footer>
 
 
