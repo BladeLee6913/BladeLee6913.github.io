@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     
-    <title>Haar小波的傅里叶变换 | Zhipeng&#39;s Note</title>
+    <title>最大似然估计及其在信号估计中的应用 | Zhipeng&#39;s Note</title>
     <meta name="renderer" content="webkit">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
@@ -15,11 +15,11 @@
     <meta name="description" content="Exploring Essence">
 
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Haar小波的傅里叶变换 | Zhipeng&#39;s Note">
+    <meta name="twitter:title" content="最大似然估计及其在信号估计中的应用 | Zhipeng&#39;s Note">
     <meta name="twitter:description" content="Exploring Essence">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Haar小波的傅里叶变换 | Zhipeng&#39;s Note">
+    <meta property="og:title" content="最大似然估计及其在信号估计中的应用 | Zhipeng&#39;s Note">
     <meta property="og:description" content="Exploring Essence">
 
     
@@ -37,7 +37,7 @@
     <link rel="alternate" type="application/rss+xml" title="Zhipeng&#39;s Note" href="/atom.xml">
     
 
-    <link rel="canonical" href="http://yoursite.com/2019/08/18/Haar小波的傅里叶变换/"/>
+    <link rel="canonical" href="http://yoursite.com/2019/08/21/最大似然估计以及其在信号估计中的应用/"/>
 
                  
 </head>
@@ -133,7 +133,7 @@
 
   <header class="post-header">
     <div class="post-meta">
-      <time datetime="2019-08-18T08:32:35.915Z" class="post-list__meta--date date">2019-08-18</time> &#8226; <span class="post-meta__tags tags">于 
+      <time datetime="2019-08-21T09:11:48.910Z" class="post-list__meta--date date">2019-08-21</time> &#8226; <span class="post-meta__tags tags">于 
   <a class="tag-link" href="/tags/Signal-processing/">Signal processing</a>
  </span>
       <span class="page-pv">
@@ -141,19 +141,30 @@
       </span> 
    
     </div>
-    <h1 class="post-title">Haar小波的傅里叶变换</h1>
+    <h1 class="post-title">最大似然估计及其在信号估计中的应用</h1>
   </header>
 
   <section class="post">
-    <p>Haar小波来自于数学家Haar于1910年提出的Haar正交函数集，其定义如(1)式。<br>$$<br>\tag{1}<br>\psi \left( t \right) =<br>\begin{cases}<br>1,&amp;  0 \leq t &lt; \frac{1}{2} \\<br>-1,&amp; \frac{1}{2} \leq t&lt; 1\\<br>0,&amp; \text{其他}<br>\end{cases}<br>$$</p>
-<p>之前有人问过我Haar小波的傅里叶变换\(  \Psi ( j\Omega )  \) 是多少，当时没有推导出来。后来在一位师弟的提示下，推导得到了书上的结果，现在将推导的过程完整地写一遍。</p>
-<p>将\( \psi \left( t \right) \)左移至关于y轴对称，得到(2)式。<br>$$<br>\tag{2}<br>\psi \left( t \right) =<br>\begin{cases}<br>1,&amp; -\frac{1}{2}\leq t&lt;0 \\<br>-1,&amp; 0\leq t&lt;\frac{1}{2}\\<br>0,&amp; \text{其他}<br>\end{cases}<br>$$</p>
-<p>对(2)式进行一次微分，可以得到(3)式。<br>$$<br>\tag{3}<br>\frac{d\psi \left( t \right)}{dt}=\delta \left( t+\frac{1}{2} \right) -2\delta \left( t \right) +\delta \left( t-\frac{1}{2} \right)<br>$$</p>
-<p>(3)式中\( \delta \left( t \right) \)为单位冲激函数，对(3)式两边进行傅里叶变换得到(4)式。<br>$$<br>\tag{4}<br>j\Omega \Psi \left( j\Omega \right) =e^{j\Omega \frac{1}{2}}-2+e^{-j\Omega \frac{1}{2}}<br>$$</p>
-<p>(4)式中\( \Psi \left( j\Omega \right) \)<br> 为(2)式所对应的傅里叶变换。根据欧拉公式，对(4)式进行如下变换。<br>$$<br>\tag{5}<br>j\Omega \Psi \left( j\Omega \right) =\left( \cos \frac{1}{2}\Omega +j\sin \frac{1}{2}\Omega \right) -2+\left( \cos \frac{1}{2}\Omega -j\sin \frac{1}{2}\Omega \right)<br>$$<br>$$<br>\tag{6}<br>j\Omega \Psi \left( j\Omega \right) =2\cos \frac{1}{2}\Omega -2<br>$$</p>
-<p>根据三角函数二倍角公式，对(6)式进行变换得到(7)式。<br>$$<br>\tag{7}<br>j\Omega \Psi \left( j\Omega \right) =-4\left( \sin \frac{1}{4}\Omega \right) ^2<br>$$</p>
-<p>因此，\( \Psi \left( j\Omega \right) 为 -4\frac{1}{j\Omega}\left( \sin \frac{1}{4}\Omega \right) ^2 \) ，化简后为\( j\frac{4}{\Omega}\left( \sin \frac{1}{4}\Omega \right) ^2 \)</p>
-<p>由于\( \Psi \left( j\Omega \right) \)是为Haar小波在时域中左移0.5后进行傅里叶变换得到，因此，Haar小波所对应的傅里叶变换如式(8)。<br>$$<br>\tag{8}<br>\Psi \left( j\Omega \right) =j\frac{4}{\Omega}\left( \sin \frac{\Omega}{4} \right) ^2e^{-j\frac{\Omega}{2}}<br>$$</p>
+    <p>最近因为需要对井下超声信号进行估计，所以对最大似然估计这个理论重新进行了深入学习与思考。</p>
+<h2 id="什么是最大似然估计"><a href="#什么是最大似然估计" class="headerlink" title="什么是最大似然估计"></a>什么是最大似然估计</h2><p>先说一下什么是最大似然估计。在统计学中，“概率”与“似然”有着截然不同的用法，概率描述了已知参数时的随机变量的输出结果；似然则用来描述已知随机变量输出结果时，未知参数的可能取值。举个栗子，假设一个骰子，6个面中三个面分别为1，2，3，剩下的三个面都是6，那么随机投掷一次，6朝上的概率\( P(x=6) \)为0.5，这里的已知参数为三个面是6，其余三个面为1，2，3，所以我们可以知道每面朝上的概率分别为多少。那么换过来，假设我们无法直接通过观察得到骰子的具体情况，但我们想知道这个骰子的6个面的点数分别是多少，一种办法就是通过大量的实验，根据实验结果进行估计骰子各个面的情况。  </p>
+<p>假设进行10次随机投掷，有5次朝上的数字是6。如果以0.5作为骰子面对应为数字6的参数，则产生这种实验结果的概率为<br>$$\tag{1} C_{10}^{5}(0.5)^5(1-0.5)^5 \approx 0.27$$</p>
+<p>如果以\( \frac{1}{6} \)为骰子面对应为数字6的参数，则产生这种实验结果的概率为<br>$$\tag{2} C_{10}^{5}( \frac{1}{6} )^5(1- \frac{1}{6} )^5 \approx 0.013$$</p>
+<p>从结果可以看出，我可以认为以0.5作为参数的可能性是以\( \frac{1}{6} \)作为参数的可能性的\( \frac{0.27}{0.013} \approx 20 \)倍。我们设骰子的参数为\( \theta \)，得到似然函数如(3)式。<br>$$ \tag{3} L(\theta)=C_{10}^{5} \theta^5 (1-\theta)^5 $$</p>
+<p>这样就可以画出(3)式的函数图像。如下图1<br><img src="http://pwkyxy15p.bkt.clouddn.com/%E4%BC%BC%E7%84%B6%E5%87%BD%E6%95%B01.png" alt> </p>
+<center>图1 10次随机投掷，有5次朝上的数字是6的似然函数</center>
+从图中可以看出，参数为0.5时，产生10次随机投掷，有5次朝上的数字是6这种情况的概率最大；而在其余参数位置处，概率小一点。因此，可以看出似然函数用来推测参数分布的。而求最大似然估计的问题，就转换为求似然函数的极值。
+
+<h2 id="最大似然估计在信号估计中的应用"><a href="#最大似然估计在信号估计中的应用" class="headerlink" title="最大似然估计在信号估计中的应用"></a>最大似然估计在信号估计中的应用</h2><p>信号参量的最大似然估计适用于,能够求得观测信号x的似然函数\( \rho(x|\theta) \)时，非随机信号参量的估计。如果不知道被估计量的先验概率密度，也可以采用最大似然估计构造估计量，但是效果不是最佳的。</p>
+<p>设被估计的非随机单参量为\( \theta \)，观测方程为<br>$$<br>\tag{4}<br>x=\theta+n<br>$$</p>
+<p>其中，x是观测得到的信号，\( \theta \)为被估计的非随机单参量，n为均值为\( \mu \)，方差为\( \sigma^2 \)的高斯随机噪声。则根据最大似然估计的定义，观测信号x的似然函数\( \rho(x|\theta) \)的峰值，相对于无被估计量\( \theta=0 \)所对应的似然函数\( \rho(x|\theta=0) \)的峰值，其偏移量恰好为被估计的量\( \theta \)的值。因此，如果已知似然函数\( \rho(x|\theta) \)，则最大似然估计量\( \hat{\theta} \)可以由(5)式得到。<br>$$<br>\tag{5}<br>\frac{\partial \rho \left( x|\theta \right)}{\partial \theta}|_{\theta =\hat{\theta}}=0<br>$$</p>
+<p>一般情况下，我们希望可以通过信号参量\( \theta \)的最大似然估计来得到与之对应、存在某种关系的最大似然估计量\( \hat{\alpha} \)。举个栗子，假设线性观测方程为\( x=\theta+n \)，x是观测得到的信号，\( \theta \)为被估计的非随机单参量，n为均值为\( \mu \)，方差为\( \sigma^2 \)的高斯随机噪声，那么\( \theta \)的函数\( \alpha=exp(\theta) \)的最大似然估计量\( \hat{\alpha} \)可以通过以下步骤获得。</p>
+<blockquote>
+</blockquote>
+<ol>
+<li>由观测信号x得到似然函数<br>$$\tag{6}<br>\rho \left( x|\theta \right) =\sqrt{\frac{1}{2\pi \sigma ^2}}\exp \left( -\frac{\left( x-\theta -\mu \right) ^2}{2\sigma ^2} \right)<br>$$</li>
+<li>根据式(5)，求解最大似然方程组得到<br>$$<br>\tag{7}<br>\hat{\theta}=x-\mu<br>$$</li>
+<li>因为\( \alpha=exp(\theta) \)所对应的反函数\( \theta=ln(\alpha) \)是唯一的，所以可以求解得到\( \hat\alpha \)。<br>$$<br>\tag{8}<br>\hat\alpha=exp(\hat\theta)=exp(x-\mu)<br>$$</li>
+</ol>
 
   </section>
 
@@ -162,23 +173,22 @@
 <section class="read-more">
            
     
+        
+        
                
             <div class="read-more-item">
-                <span class="read-more-item-dim">Newer Post</span>
-                <h2 class="post-list__post-title post-title"><a href="/2019/08/21/最大似然估计以及其在信号估计中的应用/" title="最大似然估计及其在信号估计中的应用">最大似然估计及其在信号估计中的应用</a></h2>
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/08/18/Haar小波的傅里叶变换/" title="Haar小波的傅里叶变换">Haar小波的傅里叶变换</a></h2>
                 <p class="excerpt">
                 
-                最近因为需要对井下超声信号进行估计，所以对最大似然估计这个理论重新进行了深入学习与思考。
-什么是最大似然估计先说一下什么是最大似然估计。在统计学中，“概率”与“似然”有着截然不同的用法，概率描述了已知参数时的随机变量的输出结果；似然则用来描述已知随机变量输出结果时，未知参数的可能取值。举个栗子，假设
+                Haar小波来自于数学家Haar于1910年提出的Haar正交函数集，其定义如(1)式。$$\tag{1}\psi \left( t \right) =\begin{cases}1,&amp;amp;  0 \leq t &amp;lt; \frac{1}{2} \\-1,&amp;amp; \frac{1}{2} \le
                 &hellip;
                 </p>
-                <div class="post-list__meta"><time datetime="2019-08-21T09:11:48.910Z" class="post-list__meta--date date">2019-08-21</time> &#8226; <span class="post-list__meta--tags tags">于 
+                <div class="post-list__meta"><time datetime="2019-08-18T08:32:35.915Z" class="post-list__meta--date date">2019-08-18</time> &#8226; <span class="post-list__meta--tags tags">于 
   <a class="tag-link" href="/tags/Signal-processing/">Signal processing</a>
-</span><a class="btn-border-small" href="/2019/08/21/最大似然估计以及其在信号估计中的应用/">详细阅读</a></div>
-                           
+</span><a class="btn-border-small" href="/2019/08/18/Haar小波的傅里叶变换/">详细阅读</a></div>
+                       
             </div>
-        
-        
         
      
    
