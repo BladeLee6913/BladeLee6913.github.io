@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="z">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>使用DSP2812的CPU定时器进行延时 | Zhipeng&#39;s Note</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="Exploring Essence">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="使用DSP2812的CPU定时器进行延时 | Zhipeng&#39;s Note">
+    <meta name="twitter:description" content="Exploring Essence">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="使用DSP2812的CPU定时器进行延时 | Zhipeng&#39;s Note">
+    <meta property="og:description" content="Exploring Essence">
+
+    
+    <meta name="author" content="Zhipeng">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Zhipeng&#39;s Note" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2019/09/14/DSP2812/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/background-cover.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Zhipeng&#39;s Note 的主页"><img src="/images/timg.jpg" width="80" alt="Zhipeng&#39;s Note logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Zhipeng&#39;s Note">Zhipeng&#39;s Note</a></h1>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Exploring Essence</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/about-me">About me</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/BladeLee6913" title="GitHub" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-slate"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-09-14T03:15:05.563Z" class="post-list__meta--date date">2019-09-14</time> &#8226; <span class="post-meta__tags tags">于 
+  <a class="tag-link" href="/tags/Embedded-Development/">Embedded Development</a>
+ </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">使用DSP2812的CPU定时器进行延时</h1>
+  </header>
+
+  <section class="post">
+    <p>最近因为项目的原因，需要使用TMS320F2812这款DSP，其他部分都完成的差不多了，要求的功能的都实现了，唯独在调用延时函数的时候出现了问题。一般来讲在DSP2812中，如果需要使用进行延时，会调用TI官方写的一个延时函数DELAY_US()，其定义的如下</p>
+<pre><code>define DELAY_US(A) 
+DSP28x_usDelay(((((long double) A * 1000.0L) / (long double)CPU_RATE) - 9.0L) / 5.0L)</code></pre><p>具体的执行函数在DSP281x_usDelay.asm中。比如我需要10微秒的延时，只需要给DELAY_US()赋值10，如DELAY_US(10)，然后在程序调用就行。但是在我的项目中，由于需要对一组数据进行循环计算100次，在一次循环中需要用到两次延时，分别为6微秒和8.67微秒，因此我一开始就直接使用了DELAY_US()这个函数，奇怪的是前六次循环都没问题，程序正常执行，在进入第七次循环的时候，程序出错了，进入了非法中断interrupt  void  ILLEGAL_ISR(void)中，单步调试后发现问题出在了DELAY_US()，在查询了网上各种解决方法后，逐一尝试后，问题还没解决。由于项目时间紧，我放弃了使用DELAY_US()函数，想了两个方案——第一，使用for循环，根据DSP的时钟计算出需要for的次数，但是整个板子的供电不是很稳定，导致晶振的输出不是很稳定，导致DSP的时钟周期不是很固定，加上使用for循环进行延时，本身就算的不是很准，就使得调试的时候经常出现这一次调好了，下一次出不了数据，打示波器一看，延时不对。因为以前用过stm32，因此想到了第二个办法——使用定时器做延时。</p>
+<p>TMS320F2812提供了3个32位CPU定时器，其中只有CPU定时器0可以为用户使用，其他两个为系统保留。定时器工作前的初始化配置主要由两个部分组成——配置周期寄存器PRDH:PRD，定时器的一个计数周期为(PRDH:PRD+1)次，以及配置定时器计数走一次需要的时间，这个需要由定时器分频器TDDRH:TDDR决定，假设系统时钟SYSCLKOUT值为X(MHz)，那么每走一步的时间为<br>$$<br>\tag{1}<br>TIMCLK=\frac{TDDRH:TDDR+1}{X}\times 10^{-6}\left( s \right)<br>$$<br>CPU定时器一个计数周期走了PRDH:PRD+1次，因此总的计时时间为<br>$$<br>\tag{2}<br>T=\left( PRDH:PRD+1 \right) \times TIMCLK\left( s \right)<br>$$<br>TMS320F2812的CPU定时器0的初始化配置文件在DSP281x_CpuTimers.c中，初始化配置函数为void InitCpuTimers(void)，这里我用了官方默认的配置。另外在函数初始化的时候，还要用到void ConfigCpuTimer(struct CPUTIMER_VARS *Timer, float Freq, float Period)这个函数，我的配置成这样，ConfigCpuTimer(&amp;CpuTimer0, 150, 8.67)——第一个参数是指要调用的定时器，因为只有CPU定时器0可以使用，因此这位是固定的；第二个参数是你要用的系统时钟频率，我选的150Mhz；第三位是要计时的时间，使用默认的配置，其计时单位就是微秒。</p>
+<p>准备工作做好后，接下就是使用定时器进行延时。CPU定时器0的控制在寄存器TIMERxTCR中，首先确定需要延时的位置，然后启动定时器，即给TIMERxTCR寄存器TSS赋值0，立即启动定时器。然后在while中等待TIMERxTCR寄存器中断标志位TIF，当计时结束后，该位被置1，跳出等待，延时完成。这里需要注意的是，结束之后应该给TSS和TIF赋值1，来停止定时器和清除标志位，同时给TRB置1将PRDH:PRD和TDDRH:TDDR的值重装，以便进行下一次使用CPU定时器。经过测试，定时很精准，而且系统可以长时间稳定运行，解决了之前问题。</p>
+<p>一般来说，DSP中CPU定时器0主要用来进行定时器中断，执行一些特别的需要周期执行的任务，以提高效率。最后想请教各位读者一个问题：DSP的DELAY函数为什么会循环执行6次之后，系统就会进入非法中断（说明整个函数都是在RAM中跑的），真的是找不到原因！</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/08/21/最大似然估计以及其在信号估计中的应用/" title="最大似然估计及其在信号估计中的应用">最大似然估计及其在信号估计中的应用</a></h2>
+                <p class="excerpt">
+                
+                最近因为需要对井下超声信号进行估计，所以对最大似然估计这个理论重新进行了深入学习与思考。
+什么是最大似然估计先说一下什么是最大似然估计。在统计学中，“概率”与“似然”有着截然不同的用法，概率描述了已知参数时的随机变量的输出结果；似然则用来描述已知随机变量输出结果时，未知参数的可能取值。举个栗子，假设
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-08-21T09:11:48.910Z" class="post-list__meta--date date">2019-08-21</time> &#8226; <span class="post-list__meta--tags tags">于 
+  <a class="tag-link" href="/tags/Signal-processing/">Signal processing</a>
+</span><a class="btn-border-small" href="/2019/08/21/最大似然估计以及其在信号估计中的应用/">详细阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 Zhipeng - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+  
+         <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+    
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+   
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?ad918665f724f3387f557e7c68bc6dcf";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>
